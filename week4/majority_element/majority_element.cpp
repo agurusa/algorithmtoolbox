@@ -4,10 +4,24 @@
 
 using std::vector;
 
-int get_majority_element(vector<int> &a, int left, int right) {
-  if (left == right) return -1;
-  if (left + 1 == right) return a[left];
-  //write your code here
+int get_majority_element(vector<int> &a, int left, int right){
+  if (left == right){
+    return -1;
+  } 
+  else if (left + 1 == right){
+    return a[left];
+  } 
+  else{
+    int mid = (right - left)/2;
+    int ml = get_majority_element(a, left, left + mid);
+    int mr = get_majority_element(a, left + mid, right);
+    if (ml == mr) return ml; 
+    else if(count(a.begin(), a.end(), ml) > mid) return ml;
+    else if(count(a.begin(), a.end(), mr) > mid) return mr;
+    else {
+      return -1;
+    }
+  }
   return -1;
 }
 
