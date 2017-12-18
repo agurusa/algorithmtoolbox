@@ -5,7 +5,6 @@
 using std::vector;
 
 int get_majority_element(vector<int> &a, int left, int right){
-  // std::cout << left << " left " << right << " right \n";
   if (left == right){
     return -1;
   } 
@@ -16,10 +15,6 @@ int get_majority_element(vector<int> &a, int left, int right){
     int mid = (right - left)/2;
     int ml = get_majority_element(a, left, left + mid);
     int mr = get_majority_element(a, left + mid, right);
-    // std::cout << ml << " ml " << mr << " mr \n";
-    // std::cout << a.begin() << " begin + left " << a.begin() << " begin + right " 
-    // std::cout<< count(a.begin() + left, a.begin() + right, ml) << " count left \n";
-    // std::cout<< count(a.begin() + left, a.begin() + right, mr) << " count right \n";
     if (ml == mr) return ml; 
     else if(count(a.begin() + left, a.begin() + right, ml) > mid) return ml;
     else if(count(a.begin() + left, a.begin() + right, mr) > mid) return mr;
