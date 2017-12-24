@@ -1,0 +1,4 @@
+1
+/*output should be:
+0
+1*/
