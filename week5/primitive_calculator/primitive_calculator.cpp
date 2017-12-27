@@ -5,86 +5,46 @@
 
 using std::vector;
 
-vector<int> min_operations(int n, vector<int>numbas = {}){
-  numbas.push_back(n);
-  if(n == 1){
-    reverse(numbas.begin(), numbas.end());
-    return numbas;
+int set_x(int n, int op){
+  if(op == 1){
+    return n - 1;
   }
   else{
-    vector<int> options = {3,2,1};
-    int n_over_three, n_over_two, n_minus_1;
-    for(int i = 0; i < options.size(); i++){
-      int option = options[i];
-      if(option == 1){
-        n_minus_1 = n - option;
-      }
-      else{
-        if(n%option == 0){
-          if(option == 2){
-            n_over_two = n/option;
-          }
-          else{
-            n_over_three = n/option;
-          }
-        }
-        else{
-          if(option == 2){
-            n_over_two = n;
-          }
-          else{
-            n_over_three = n;
-          }
-        }
-      }
+    if(n%op == 0){
+      return n / op;
     }
-    int result = std::min(std::min(n_minus_1, n_over_two), n_over_three);
-    return(min_operations(result, numbas));
+    else{ 
+      return n;
+    }
   }
 }
-int min_test(int n, int count = 1){
-  if(n == 1){
-    return 0;
-  }
-  else{
-    int a_count = count;
-    vector<int> options = {3,2,1};
-    int n_over_three;
-    int n_over_two;
-    int n_minus_1;
-    for(int i = 0; i < options.size(); i++){
-      int option = options[i];
-      if(option == 1){
-        n_minus_1 = n - option;
+
+vector<int> min_ops(int n){
+  vector<int> min_op = {0};
+  std::map<int, vector<int>> number_map = {};
+
+  for(int i = 1; i <= n; i++){
+    int theoretical_min_op;
+    min_op.push_back(i - 1);
+    number_map[i].push_back(1);  
+    for(int y = 1; y <= 3; y++){
+      int x = set_x(i, y);
+      if(x == i){
       }
       else{
-        if(n%option == 0){
-          if(option == 2){
-            n_over_two = n/option;
-          }
-          else{
-            n_over_three = n/option;
-          }
-        }
-        else{
-          if(option == 2){
-            n_over_two = n;
-          }
-          else{
-            n_over_three = n;
-          }
+        theoretical_min_op = min_op[x] + 1;
+        if(theoretical_min_op < min_op[i]){ 
+          min_op[i] = theoretical_min_op;
+          number_map[i] = number_map[x];
+          number_map[i].push_back(i);
         }
       }
     }
-    int result = std::min(std::min(n_minus_1, n_over_two), n_over_three);
-    if(result == 1){
-      return a_count;
-    }
-    else{
-      a_count = a_count+1;
-      return min_test(result, a_count);
-    }
   }
+  if(n == 2){
+    number_map[n].push_back(n);
+  }
+  return number_map[n];
 }
 
 vector<int> optimal_sequence(int n) {
@@ -108,7 +68,7 @@ int main() {
   int n;
   std::cin >> n;
   // vector<int> sequence = optimal_sequence(n);
-  vector<int> seq = min_operations(n);
+  vector<int> seq = min_ops(n);
   // std::cout << sequence.size() - 1 << std::endl;
   // for (size_t i = 0; i < sequence.size(); ++i) {
   //   std::cout << sequence[i] << " ";
